@@ -19,6 +19,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalIdCache;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Employee{
 	
@@ -31,7 +33,8 @@ public class Employee{
 	private String email;
 	private String adress;
 	private String post;
-	private long phone;
+	private int phone;
+	private String responsable;
 	/*
 	@OneToMany(mappedBy="employee",cascade=CascadeType.ALL,orphanRemoval = true)
 	private List<SkillsEmpl> lse;
@@ -45,9 +48,11 @@ public class Employee{
 	*/
 	
 	@OneToMany(mappedBy="empl",cascade=CascadeType.ALL)
+	@JsonIgnoreProperties("empl")
 	private List<Skills> skillsEmpl = new ArrayList<Skills>();
 	
 	@ManyToOne
+	@JsonIgnoreProperties("team")
 	private Team team;
 	@OneToMany(mappedBy="empl")
 	private List<Vacation> vac;
@@ -60,10 +65,10 @@ public class Employee{
 		this.skillsEmpl = skillsEmpl;
 	}
 	
-	public long getPhone() {
+	public int getPhone() {
 		return phone;
 	}
-	public void setPhone(long phone) {
+	public void setPhone(int phone) {
 		this.phone = phone;
 	}
 	public String getFirstname() {
@@ -115,7 +120,14 @@ public class Employee{
 		this.team = team;
 	}
 	
-	public Employee(String firstname, String lastname, String email, String adress, String post, long phone) {
+	public String getResponsable() {
+		return responsable;
+	}
+	public void setResponsable(String responsable) {
+		this.responsable = responsable;
+	}
+	
+	public Employee(String firstname, String lastname, String email, String adress, String post, int phone, String resp) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -123,6 +135,7 @@ public class Employee{
 		this.adress = adress;
 		this.post = post;
 		this.phone = phone;
+		this.responsable= resp;
 	}
 	
 	public Employee() {
@@ -131,7 +144,7 @@ public class Employee{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return getIdEmpl() + " " + getFirstname() + " " + getLastname() + " " + getEmail()+ " ";
+		return getIdEmpl() + " " + getFirstname() + " " + getLastname() + " " + getEmail()+ " "+ getPhone() +" "+ getResponsable() + " " + getTeam().getTeamName()+" ";
 	}
 	/*
 	public void addSkills(Skills s) {

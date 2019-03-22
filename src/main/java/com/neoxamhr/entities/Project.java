@@ -44,5 +44,16 @@ public class Project implements Serializable {
 	public void setSkillsProj(List<SkillsProj> skillsProj) {
 		this.skillsProj = skillsProj;
 	}
+	public Project(String name) {
+		super();
+		this.name = name;
+	}
+	public Project() {
+		super();
+	}
+	
+	
+	
+	
 
 }

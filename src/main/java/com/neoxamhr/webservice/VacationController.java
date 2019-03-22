@@ -1,5 +1,7 @@
 package com.neoxamhr.webservice;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,11 @@ public class VacationController {
 	public @ResponseBody boolean addEve(@RequestBody int id ){		
 		vr.deleteById(id);
 		return true;
+	}
+	
+	@RequestMapping(value="/empvac")
+	public List<Employee> findEmpVac(){
+		return vr.findEmpVac();
 	}
 	
 }

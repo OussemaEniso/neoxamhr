@@ -7,8 +7,10 @@ public class FormEmploye {
 	private String firstname;
 	private String adress;
 	private String email;
-	private Long phone;
+	private int phone;
 	private String post;
+	private String dep;
+	private String resp;
 	
 	public int getId() {
 		return id;
@@ -46,13 +48,27 @@ public class FormEmploye {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Long getPhone() {
+	
+	public int getPhone() {
 		return phone;
 	}
-	public void setPhone(Long phone) {
-		this.phone = phone;
+	public void setPhone(int ph) {
+		this.phone = ph;
 	}
-	public FormEmploye(String lastname, String firstname, String adress, String email, Long phone, String post) {
+	public String getDep() {
+		return dep;
+	}
+	public void setDep(String dep) {
+		this.dep = dep;
+	}
+	public String getResp() {
+		return resp;
+	}
+	public void setResp(String resp) {
+		this.resp = resp;
+	}
+	
+	public FormEmploye(String lastname, String firstname, String adress, String email, int phone, String post, String dep,String resp) {
 		super();
 		this.lastname = lastname;
 		this.firstname = firstname;
@@ -60,6 +76,8 @@ public class FormEmploye {
 		this.email = email;
 		this.phone = phone;
 		this.post = post;
+		this.dep= dep;
+		this.resp = resp;
 	}
 	public FormEmploye() {
 		super();
