@@ -42,7 +42,7 @@ public class ProjectController {
 		
 		Project p=pr.findById(pf.getId()).get();
 		
-		Team t= tr.findByTeamName(pf.getName()).get(0);
+		Team t= tr.findByTeamNameIgnoreCase(pf.getName()).get(0);
 		
 		t.setProject(p);
 		

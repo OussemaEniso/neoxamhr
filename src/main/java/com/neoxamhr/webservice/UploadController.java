@@ -64,9 +64,12 @@ public class UploadController {
 	@GetMapping("/files/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-	 Resource file = sis.loadFile(filename);
-	 return ResponseEntity.ok()
-	 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-	 .body(file);
+
+			 Resource file = sis.loadFile(filename);
+			 return ResponseEntity.ok()
+			 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+			 .body(file);
 	}
+	
+	
 }

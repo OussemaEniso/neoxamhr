@@ -16,6 +16,12 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
 	@Query("select e from Employee e where e.team is null")
 	List<Employee> findNotYet();
 	
+	@Query("select e from Employee e join User u on u.mail=?1 and e.email=?1")
+	Employee findProfil(String mail);
+	
+	@Query("select e from Employee e where responsable=?1")
+	List<Employee> findByResp(String name);
+	
 
 	
 

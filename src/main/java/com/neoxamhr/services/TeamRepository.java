@@ -10,7 +10,7 @@ import com.neoxamhr.entities.Team;
 
 public interface TeamRepository extends CrudRepository<Team, Integer>  {
 	
-	List<Team> findByTeamName(String name);
+	List<Team> findByTeamNameIgnoreCase(String name);
 	
 	@Query("select t from Team t where t.project is null")
 	List<Team> findNotYet();

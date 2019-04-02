@@ -7,11 +7,18 @@ public class FormEmploye {
 	private String firstname;
 	private String adress;
 	private String email;
-	private int phone;
+	private int ph;
 	private String post;
 	private String dep;
-	private String resp;
+	private String responsable;
+	private int estResp;
 	
+	public int getEstResp() {
+		return estResp;
+	}
+	public void setEstResp(int isResp) {
+		this.estResp = isResp;
+	}
 	public int getId() {
 		return id;
 	}
@@ -49,11 +56,11 @@ public class FormEmploye {
 		this.email = email;
 	}
 	
-	public int getPhone() {
-		return phone;
+	public int getPh() {
+		return ph;
 	}
-	public void setPhone(int ph) {
-		this.phone = ph;
+	public void setPh(int ph) {
+		this.ph = ph;
 	}
 	public String getDep() {
 		return dep;
@@ -61,26 +68,33 @@ public class FormEmploye {
 	public void setDep(String dep) {
 		this.dep = dep;
 	}
-	public String getResp() {
-		return resp;
+	public String getResponsable() {
+		return responsable;
 	}
-	public void setResp(String resp) {
-		this.resp = resp;
+	public void setResponsable(String resp) {
+		this.responsable = resp;
 	}
 	
-	public FormEmploye(String lastname, String firstname, String adress, String email, int phone, String post, String dep,String resp) {
+	public FormEmploye(String lastname, String firstname, String adress, String email, int ph, String post, String dep,String resp) {
 		super();
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.adress = adress;
 		this.email = email;
-		this.phone = phone;
+		this.ph = ph;
 		this.post = post;
 		this.dep= dep;
-		this.resp = resp;
+		this.responsable = resp;
 	}
 	public FormEmploye() {
 		super();
 	}
+	@Override
+	public String toString() {
+		return this.id+" "+this.adress + " " + this.email + " " + this.firstname + " " + this.lastname + " " + this.ph  ;
+		
+	}
+	
+	
 
 }

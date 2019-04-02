@@ -9,15 +9,19 @@ import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalIdCache;
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -35,17 +39,7 @@ public class Employee{
 	private String post;
 	private int phone;
 	private String responsable;
-	/*
-	@OneToMany(mappedBy="employee",cascade=CascadeType.ALL,orphanRemoval = true)
-	private List<SkillsEmpl> lse;
-	
-	public List<SkillsEmpl> getLse() {
-		return lse;
-	}
-	public void setLse(List<SkillsEmpl> lse) {
-		this.lse = lse;
-	}
-	*/
+	private int estResp;
 	
 	@OneToMany(mappedBy="empl",cascade=CascadeType.ALL)
 	@JsonIgnoreProperties("empl")
@@ -58,9 +52,29 @@ public class Employee{
 	private List<Vacation> vac;
 	
 	
+	/*
+	@OneToMany(mappedBy="employee",cascade=CascadeType.ALL,orphanRemoval = true)
+	private List<SkillsEmpl> lse;
+	
+	public List<SkillsEmpl> getLse() {
+		return lse;
+	}
+	public void setLse(List<SkillsEmpl> lse) {
+		this.lse = lse;
+	}
+	*/
+	
+	public int getEstResp() {
+		return estResp;
+	}
+	public void setEstResp(int isResp) {
+		this.estResp = isResp;
+	}
+	
 	public List<Skills> getSkillsEmpl() {
 		return skillsEmpl;
 	}
+	
 	public void setSkillsEmpl(List<Skills> skillsEmpl) {
 		this.skillsEmpl = skillsEmpl;
 	}
@@ -144,7 +158,7 @@ public class Employee{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return getIdEmpl() + " " + getFirstname() + " " + getLastname() + " " + getEmail()+ " "+ getPhone() +" "+ getResponsable() + " " + getTeam().getTeamName()+" ";
+		return getIdEmpl() + " " + getFirstname() + " " + getLastname() + " " + getEmail()+ " "+ getPhone() +" "+ getResponsable() + " " + getTeam().getTeamName()+"xx "+this.estResp+" " ;
 	}
 	/*
 	public void addSkills(Skills s) {

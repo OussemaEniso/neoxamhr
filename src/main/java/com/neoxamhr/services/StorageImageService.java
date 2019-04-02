@@ -32,13 +32,11 @@ public class StorageImageService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				System.out.print("waaaaaa not exist");
-				throw new RuntimeException("FAIL!");
+				return null;
 				
 			}
 		} catch (Exception e) {
-			System.out.print("waaaaaa exception");
-			throw new RuntimeException("FAIL!");
+			return null;
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.neoxamhr.entities.Employee;
 import com.neoxamhr.entities.Skills;
 import com.neoxamhr.entities.Team;
+import com.neoxamhr.entities.User;
 import com.neoxamhr.services.EmployeeRepository;
 import com.neoxamhr.services.SkillsRepository;
 import com.neoxamhr.services.TeamRepository;
+import com.neoxamhr.services.UserRepository;
 import com.neoxamhr.services.VacationRepository;
 
 
@@ -47,6 +50,9 @@ public class EmployeeController {
 	@Autowired
 	private TeamRepository tr;
 	
+	@Autowired
+	private UserRepository ur;
+	
 	@RequestMapping(value="/employe")
 	public Iterable<Employee> getAllEmploye(){
 		return er.findAll();
@@ -54,13 +60,14 @@ public class EmployeeController {
 	
 	@PostMapping(value="/addEmp")
 	public @ResponseBody void addEmploye(@RequestBody FormEmploye e ) {
-		System.out.print(e.getFirstname()+e.getLastname()+e.getEmail()+e.getAdress()+ e.getPost()+e.getPhone()+e.getResp());
+		System.out.print(e.getFirstname()+e.getLastname()+e.getEmail()+e.getAdress()+ e.getPost()+e.getPh()+e.getResponsable());
 		
-		Employee emp = new Employee(e.getFirstname(),e.getLastname(),e.getEmail(),e.getAdress(),e.getPost(),e.getPhone(),e.getResp());
-		
+		Employee emp = new Employee(e.getFirstname(),e.getLastname(),e.getEmail(),e.getAdress(),e.getPost(),e.getPh(),e.getResponsable());
+		System.out.print(e.getEstResp());
+		emp.setEstResp(e.getEstResp());
 		Team t=null;
 		try {
-			t=tr.findByTeamName(e.getDep()).get(0);
+			t=tr.findByTeamNameIgnoreCase(e.getDep()).get(0);
 			emp.setTeam(t);
 		}
 		catch(Exception ex) {
@@ -68,6 +75,9 @@ public class EmployeeController {
 			tr.save(t);
 			emp.setTeam(t);
 		}
+		// crée un compte pour chaque employee nouveauté créé
+		User u=new User(emp.getEmail()," ");
+		ur.save(u);
 		er.save(emp);
 		System.out.print(emp.toString());
 		
@@ -77,24 +87,34 @@ public class EmployeeController {
 	public boolean delete(@RequestParam int id) {
 		System.out.println(id);
 		Employee e= er.findById(id).get();
+		User u=ur.findById(id-1).get();
+		ur.delete(u);
 		vr.deleteVac(id);
 		er.delete(e);
-		
 		
 		return true;
 	}
 	
-	@PostMapping(value="/modif")
+	@PostMapping(value="/modifempl")
 	public @ResponseBody boolean modifEmploye(@RequestBody FormEmploye e ) {
+		
+		
+		
+		User u= ur.findById(e.getId()-1).get();
+		u.setMail(e.getEmail());
+		System.out.println(u.toString());
+		ur.save(u);
+		
 		Employee emp= er.findById(e.getId()).get();
 		emp.setFirstname(e.getFirstname());
 		emp.setLastname(e.getLastname());
 		emp.setEmail(e.getEmail());			
 		emp.setAdress(e.getAdress());
-		if(e.getPhone() != 0)
-		emp.setPhone(e.getPhone());
+		if(e.getPh() != 0)
+		emp.setPhone(e.getPh());
 		System.out.println(emp.toString());
 		er.save(emp);
+		 
 		return true;
 	}
 	
@@ -143,7 +163,7 @@ public class EmployeeController {
 		
 		Team t=null;
 		try {
-			t=tr.findByTeamName(post.getDep()).get(0);
+			t=tr.findByTeamNameIgnoreCase(post.getDep()).get(0);
 			e.setTeam(t);
 		}
 		catch(Exception ex) {
@@ -157,6 +177,18 @@ public class EmployeeController {
 		return true;
 	}
 	
+	@RequestMapping(value="findprofil")
+	public Employee findProfil(@RequestParam String mail) {
+		return er.findProfil(mail);
+		
+	}
+	
+	@RequestMapping(value="listacomf")
+	public List<Employee> listCom(@RequestParam String id){
+		Employee e=er.findById(Integer.parseInt(id)).get();
+		List<Employee> le=er.findByResp(e.getFirstname());
+		return le;
+	}
 	
 	
 }
