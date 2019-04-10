@@ -28,6 +28,7 @@ public class Vacation implements Serializable{
 	@ManyToOne
 	@JsonIgnoreProperties("vac")
 	private Employee empl;
+	private int estcomf;
 	
 	public int getIdVac() {
 		return idVac;
@@ -58,6 +59,12 @@ public class Vacation implements Serializable{
 	}
 	public void setEmpl(Employee empl) {
 		this.empl = empl;
+	}
+	public int getEstcomf() {
+		return estcomf;
+	}
+	public void setEstcomf(int estcomf) {
+		this.estcomf = estcomf;
 	}
 	public Vacation(String vacationName, Date start, Date end, Employee empl) {
 		super();

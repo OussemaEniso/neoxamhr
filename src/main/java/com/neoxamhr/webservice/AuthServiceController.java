@@ -1,6 +1,8 @@
 package com.neoxamhr.webservice;
 
 
+import java.util.UUID;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -38,12 +40,17 @@ public class AuthServiceController {
 	
 	@PostMapping(value = "/login")
 	public @ResponseBody Employee auth(@RequestBody AuthUser user) {
-		System.out.println(user.toString());
+		Employee e=null;
 		
 		long i=userRep.countByMailAndPassword(user.getLogin(), user.getPassword());
-		this.user=userRep.findByMailAndPassword(user.getLogin(), user.getPassword());
-		
-		Employee e = er.findProfil(user.getLogin());
+		System.out.println(i);
+		try {
+			this.user=userRep.findByMailAndPassword(user.getLogin(), user.getPassword());
+			e = er.findProfil(this.user.getMail());
+		}
+		catch (Exception exp) {
+			
+		}
 
 		return e;
 	}

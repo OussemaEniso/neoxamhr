@@ -1,7 +1,9 @@
 package com.neoxamhr.webservice;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -186,8 +188,15 @@ public class EmployeeController {
 	@RequestMapping(value="listacomf")
 	public List<Employee> listCom(@RequestParam String id){
 		Employee e=er.findById(Integer.parseInt(id)).get();
-		List<Employee> le=er.findByResp(e.getFirstname());
+		List<Employee> le=er.findByResp(e.getFirstname()+" "+e.getLastname() );
+		
+		
 		return le;
+	}
+	
+	@RequestMapping(value="allresp")
+	public List<Employee> allResp(){
+		return er.allResponsable();
 	}
 	
 	

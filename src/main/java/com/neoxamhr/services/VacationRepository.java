@@ -1,5 +1,6 @@
 package com.neoxamhr.services;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,5 +22,8 @@ public interface VacationRepository extends CrudRepository<Vacation, Integer> {
 	@Transactional
 	@Query("delete from Vacation v where v.empl.idEmpl= ?1")
 	void deleteVac(int id); 
+	
+	@Query("select v from Vacation v where v.start > ?1")
+	List<Vacation> newVacc(Date d);
 
 }

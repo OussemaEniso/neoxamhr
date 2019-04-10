@@ -1,11 +1,14 @@
 package com.neoxamhr.webservice;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -26,33 +29,21 @@ import com.neoxamhr.authen.AuthHelper;
 @Controller
 public class authOutlookController {
 	
-	@RequestMapping("/index")
-	public String index(Model model, HttpServletRequest request) {
-	  UUID state = UUID.randomUUID();
-	  UUID nonce = UUID.randomUUID();
-
-	  // Save the state and nonce in the session so we can
-	  // verify after the auth process redirects back
-	  HttpSession session = request.getSession();
-	  session.setAttribute("expected_state", state);
-	  session.setAttribute("expected_nonce", nonce);
-
-	  String loginUrl = AuthHelper.getLoginUrl(state, nonce);
-	  model.addAttribute("loginUrl", loginUrl);
-	  // Name of a definition in WEB-INF/defs/pages.xml
-	  return "index.html";
-	}
-	
 	 @RequestMapping(value="/authorize", method=RequestMethod.POST)
 	  public String authorize(
 	      @RequestParam("code") String code,
 	      @RequestParam("id_token") String idToken,
 	      @RequestParam("state") UUID state,
 	      HttpServletRequest request) { 
+		 
+		 System.out.println("code is "+code);
+		 
 	    // Get the expected state value from the session
 	    HttpSession session = request.getSession();
 	    UUID expectedState = (UUID) session.getAttribute("expected_state");
 	    UUID expectedNonce = (UUID) session.getAttribute("expected_nonce");
+	    
+	    System.out.println(state + " " +  session.getAttribute("expected_state"));
 
 	    // Make sure that the state query parameter returned matches
 	    // the expected state
@@ -61,6 +52,7 @@ public class authOutlookController {
 	    	if (idTokenObj != null) {
 	    	  TokenResponse tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
 	    	  session.setAttribute("tokens", tokenResponse);
+	    	  System.out.println("tokens is "+session.getAttribute("tokens"));
 	    	  session.setAttribute("userConnected", true);
 	    	  session.setAttribute("userName", idTokenObj.getName());
 	    	// Get user info
@@ -69,6 +61,7 @@ public class authOutlookController {
 	    	  try {
 	    	    user = outlookService.getCurrentUser().execute().body();
 	    	    session.setAttribute("userEmail", user.getMail());
+	    	    System.out.println("user email "+session.getAttribute("userEmail"));
 	    	  } catch (IOException e) {
 	    	    session.setAttribute("error", e.getMessage());
 	    	  }
@@ -80,7 +73,7 @@ public class authOutlookController {
 	    else {
 	      session.setAttribute("error", "Unexpected state returned from authority.");
 	    }
-	    return "mail";
+	    return "auth.html";
 	  }
 
 }
