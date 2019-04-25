@@ -1,9 +1,14 @@
 package com.neoxamhr.webservice;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,16 +37,47 @@ public class VacationController {
 	}
 	
 	@RequestMapping(value="/addEve")
-	public @ResponseBody boolean addEve(@RequestBody VacReceive v ){		
+	public List<String> addEve(@RequestBody VacReceive v ){		
+		List<String> as= new ArrayList<String>();
 		String firstname=v.getEmploye().split(" ")[0];
 		String lastname=v.getEmploye().split(" ")[1];
 		Employee e=er.findByFirstnameAndLastname(firstname, lastname).get(0);
-		vr.save(new Vacation(v.getTitle(),v.getStart(),v.getEnd(),e));
-		return true;
+		Vacation vacc=new Vacation(v.getTitle(),v.getStart(),v.getEnd(),e,v.getNbrDay());
+		List<Vacation> lv=vr.getAllVaccOfEmp(e.getIdEmpl());
+		// eliminer le chefauchement de congé
+		for( Vacation va : lv) {
+			if(v.getStart().getTime() <= va.getEnd().getTime() && v.getEnd().getTime() >= va.getStart().getTime() ) {
+				as.add(0, "cette date est déja reservé");
+				return as;
+			}
+		}
+		
+		/*
+		System.out.println((v.getEnd().getTime()-v.getStart().getTime())/3600000 + 1);
+		int nbr=Integer.parseInt((v.getEnd().getTime()-v.getStart().getTime())/3600000 + 1+"");
+		*/
+		System.out.println(e.getSoldConge()-v.getNbrDay());
+		if(e.getSoldConge()-v.getNbrDay()<0) {
+			as.add(0, "votre solde de congé est insuffisant");
+			return as;
+		}
+		e.setSoldConge(e.getSoldConge()-v.getNbrDay());
+		vr.save(vacc);
+		as.add(0, "congé demandé avec succés");
+		return as;
 	}
+	
 	@RequestMapping(value="/deleteEve")
-	public @ResponseBody boolean addEve(@RequestBody int id ){		
-		vr.deleteById(id);
+	public @ResponseBody boolean deleteEve(@RequestBody int id ){		
+		//returner le solde de congé supprimer
+		Vacation v=vr.findById(id).get();
+		int idEmp=v.getEmpl().getIdEmpl();
+		Employee e=er.findById(idEmp).get();
+		e.setSoldConge(e.getSoldConge()+v.getNbrDay());
+		er.save(e);
+		v.setEstcomf(-1);
+		vr.save(v);
+		//vr.deleteById(id);
 		return true;
 	}
 	
@@ -61,6 +97,12 @@ public class VacationController {
 		v.setEstcomf(1);
 		vr.save(v);
 		return true;
+	}
+	
+	@Scheduled(cron="0 45 16 ? * FRI")
+	public void deleteEveNotCom() {
+		vr.deleteVacNotCom();
+		
 	}
 	
 }

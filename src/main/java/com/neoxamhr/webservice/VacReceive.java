@@ -11,7 +11,14 @@ public class VacReceive {
 	private Date start;
 	private Date end;
 	private String employe;
+	private int nbrDay;
 	
+	public int getNbrDay() {
+		return nbrDay;
+	}
+	public void setNbrDay(int nbrDay) {
+		this.nbrDay = nbrDay;
+	}
 	public int getIdVac() {
 		return idVac;
 	}

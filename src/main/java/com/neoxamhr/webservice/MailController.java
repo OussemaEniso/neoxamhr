@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.neoxamhr.authen.AuthHelper;
 import com.neoxamhr.authen.TokenResponse;
@@ -28,7 +29,7 @@ public class MailController {
 	 public List<Message> lm = new ArrayList<Message>();
 
 	@RequestMapping("/mail")
-	public ResponseEntity<?> mail(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String mail(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		HttpSession session = request.getSession();
 
 		TokenResponse tokens = (TokenResponse) session.getAttribute("tokens");
@@ -57,18 +58,30 @@ public class MailController {
 		String properties = "receivedDateTime,from,isRead,subject,bodyPreview";
 		// Return at most 10 messages
 		Integer maxResults = 10;
-
-		try {
-			System.out.println("************");
+		String message="";
+		
+		 try {
+			 /*
+			UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl("https://graph.microsoft.com/v1.0/me/mailfolders/inbox/messages");
+			urlBuilder.queryParam("orderby", "receivedDateTime DESC");
+			urlBuilder.queryParam("select", "receivedDateTime,from,isRead,subject,bodyPreview");
+			urlBuilder.queryParam("top", 10);
+			
+			 message = urlBuilder.toUriString();
+			 
+			 model.addAttribute("aa", message);
+			
+			System.out.println("********" + message);
+			*/
 			messages = outlookService.getMessages(folder, sort, properties, maxResults).execute().body();
 			model.addAttribute("messages", messages.getValue());
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
-			return null;
+			return "mail.html";
 		}
 
-		return ResponseEntity.ok(messages);
+		return "mail.html";
 	}
 	
 

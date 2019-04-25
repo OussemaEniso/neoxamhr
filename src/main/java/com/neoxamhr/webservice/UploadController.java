@@ -66,6 +66,9 @@ public class UploadController {
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
 			 Resource file = sis.loadFile(filename);
+			 if(file==null) {
+				 file=sis.loadFile("default.png");
+			 }
 			 return ResponseEntity.ok()
 			 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 			 .body(file);

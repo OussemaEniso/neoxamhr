@@ -2,6 +2,7 @@ package com.neoxamhr.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -40,6 +43,18 @@ public class Employee{
 	private int phone;
 	private String responsable;
 	private int estResp;
+	
+	private String sexe;
+	private int cin;
+	private int cnss;
+	@Temporal(TemporalType.DATE)
+	private Date birthDay;
+	private String ville;
+	@Temporal(TemporalType.DATE)
+	private Date entryDate;
+	private String matricule;
+	private int salary;
+	private double soldConge;
 	
 	@OneToMany(mappedBy="empl",cascade=CascadeType.ALL)
 	@JsonIgnoreProperties("empl")
@@ -66,6 +81,60 @@ public class Employee{
 	
 	public int getEstResp() {
 		return estResp;
+	}
+	public double getSoldConge() {
+		return soldConge;
+	}
+	public void setSoldConge(double soldConge) {
+		this.soldConge = soldConge;
+	}
+	public String getMatricule() {
+		return matricule;
+	}
+	public void setMatricule(String matricule) {
+		this.matricule = matricule;
+	}
+	public int getSalary() {
+		return salary;
+	}
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+	public String getSexe() {
+		return sexe;
+	}
+	public void setSexe(String sexe) {
+		this.sexe = sexe;
+	}
+	public int getCin() {
+		return cin;
+	}
+	public void setCin(int cin) {
+		this.cin = cin;
+	}
+	public int getCnss() {
+		return cnss;
+	}
+	public void setCnss(int cnss) {
+		this.cnss = cnss;
+	}
+	public Date getBirthDay() {
+		return birthDay;
+	}
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+	public String getVille() {
+		return ville;
+	}
+	public void setVille(String ville) {
+		this.ville = ville;
+	}
+	public Date getEntryDate() {
+		return entryDate;
+	}
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
 	}
 	public void setEstResp(int isResp) {
 		this.estResp = isResp;
@@ -141,7 +210,9 @@ public class Employee{
 		this.responsable = responsable;
 	}
 	
-	public Employee(String firstname, String lastname, String email, String adress, String post, int phone, String resp) {
+	public Employee(String firstname, String lastname, String email, String adress, String post, int phone,
+			String responsable, int estResp, String sexe, int cin, int cnss, Date birthDay, String ville,
+			Date entryDate, String matricule, int salary) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -149,9 +220,17 @@ public class Employee{
 		this.adress = adress;
 		this.post = post;
 		this.phone = phone;
-		this.responsable= resp;
+		this.responsable = responsable;
+		this.estResp = estResp;
+		this.sexe = sexe;
+		this.cin = cin;
+		this.cnss = cnss;
+		this.birthDay = birthDay;
+		this.ville = ville;
+		this.entryDate = entryDate;
+		this.matricule = matricule;
+		this.salary = salary;
 	}
-	
 	public Employee() {
 		super();
 	}

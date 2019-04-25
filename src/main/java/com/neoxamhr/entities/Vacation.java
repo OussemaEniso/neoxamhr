@@ -29,7 +29,15 @@ public class Vacation implements Serializable{
 	@JsonIgnoreProperties("vac")
 	private Employee empl;
 	private int estcomf;
+	private double nbrDay;
 	
+	
+	public double getNbrDay() {
+		return nbrDay;
+	}
+	public void setNbrDay(double nbrDay) {
+		this.nbrDay = nbrDay;
+	}
 	public int getIdVac() {
 		return idVac;
 	}
@@ -66,12 +74,13 @@ public class Vacation implements Serializable{
 	public void setEstcomf(int estcomf) {
 		this.estcomf = estcomf;
 	}
-	public Vacation(String vacationName, Date start, Date end, Employee empl) {
+	public Vacation(String vacationName, Date start, Date end, Employee empl,double nbrDay) {
 		super();
 		VacationName = vacationName;
 		this.start = start;
 		this.end = end;
 		this.empl = empl;
+		this.nbrDay=nbrDay;
 	}
 	public Vacation() {
 		super();

@@ -14,6 +14,7 @@ import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,10 +64,8 @@ public class EmployeeController {
 	@PostMapping(value="/addEmp")
 	public @ResponseBody void addEmploye(@RequestBody FormEmploye e ) {
 		System.out.print(e.getFirstname()+e.getLastname()+e.getEmail()+e.getAdress()+ e.getPost()+e.getPh()+e.getResponsable());
+		Employee emp = new Employee(e.getFirstname(),e.getLastname(),e.getEmail(),e.getAdress(),e.getPost(),e.getPh(),e.getResponsable(),e.getEstResp(),e.getSexe(),e.getCin(),e.getCnss(),e.getNaiss(),e.getVille(),e.getDateent(),e.getMat(),e.getSalaire());
 		
-		Employee emp = new Employee(e.getFirstname(),e.getLastname(),e.getEmail(),e.getAdress(),e.getPost(),e.getPh(),e.getResponsable());
-		System.out.print(e.getEstResp());
-		emp.setEstResp(e.getEstResp());
 		Team t=null;
 		try {
 			t=tr.findByTeamNameIgnoreCase(e.getDep()).get(0);
@@ -82,7 +81,6 @@ public class EmployeeController {
 		ur.save(u);
 		er.save(emp);
 		System.out.print(emp.toString());
-		
 	}
 	
 	@RequestMapping(value="/delete")
@@ -99,21 +97,23 @@ public class EmployeeController {
 	
 	@PostMapping(value="/modifempl")
 	public @ResponseBody boolean modifEmploye(@RequestBody FormEmploye e ) {
-		
-		
-		
+		/*
 		User u= ur.findById(e.getId()-1).get();
 		u.setMail(e.getEmail());
 		System.out.println(u.toString());
 		ur.save(u);
-		
+		*/
 		Employee emp= er.findById(e.getId()).get();
 		emp.setFirstname(e.getFirstname());
 		emp.setLastname(e.getLastname());
-		emp.setEmail(e.getEmail());			
+		//emp.setEmail(e.getEmail());			
 		emp.setAdress(e.getAdress());
 		if(e.getPh() != 0)
 		emp.setPhone(e.getPh());
+		emp.setBirthDay(e.getNaiss());
+		emp.setCin(e.getCin());
+		emp.setCnss(e.getCnss());
+		emp.setVille(e.getVille());
 		System.out.println(emp.toString());
 		er.save(emp);
 		 
@@ -190,7 +190,6 @@ public class EmployeeController {
 		Employee e=er.findById(Integer.parseInt(id)).get();
 		List<Employee> le=er.findByResp(e.getFirstname()+" "+e.getLastname() );
 		
-		
 		return le;
 	}
 	
@@ -198,6 +197,38 @@ public class EmployeeController {
 	public List<Employee> allResp(){
 		return er.allResponsable();
 	}
+	/*
+	@Scheduled(cron="0 0 18 L * ?")
+	public void addScore() {
+		List<Employee> le= (List<Employee>) er.findAll();
+		for(Employee e : le ) {
+			e.setSoldConge(e.getSoldConge()+1.75);
+		}
+		System.out.println("+1.75 monthly");
+		er.saveAll(le);
+	}
+	*/
 	
+	@Scheduled(cron="0 40 9 ? * MON-FRI")
+	public void addScore() {
+		List<Employee> le= (List<Employee>) er.findAll();
+		for(Employee e : le ) {
+			e.setSoldConge(e.getSoldConge()+1.75);
+		}
+		System.out.println(new Date());
+		er.saveAll(le);
+		
+	}
+	
+	@RequestMapping(value="/nbrconge")
+	public int nbrConge(@RequestParam int id) {
+		try {
+			return vr.nbrConge(id);
+		}
+		catch(Exception e) {
+			return 0;
+		}
+		
+	}
 	
 }
