@@ -36,5 +36,14 @@ public interface VacationRepository extends CrudRepository<Vacation, Integer> {
 	@Transactional
 	@Query("delete from Vacation v where v.estcomf= -1")
 	void deleteVacNotCom();
+	
+	@Query("select distinct v from Vacation v join Employee e on e.estResp=1 and v.estcomf=0")
+	List<Vacation> congeOfResp();
+	
+	@Query("select v from Vacation v where v.empl.idEmpl=?1")
+	public List<Vacation> myVac(int id);
+	
+	@Query("select v from Vacation v where v.empl.idEmpl=?1 and v.estnotif=0")
+	public List<Vacation> myVacNotNotif(int id);
 
 }

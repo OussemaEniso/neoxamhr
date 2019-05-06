@@ -105,4 +105,34 @@ public class VacationController {
 		
 	}
 	
+	@RequestMapping(value="/congeresp")
+	public List<Vacation> congeOfResp(){
+		return vr.congeOfResp();
+	}
+	
+	@RequestMapping(value="/myvac")
+	public List<Vacation> myVac(@RequestParam int id){
+		return vr.myVac(id);
+	}
+	
+	@RequestMapping(value="/myvacnotnotif")
+	public List<Vacation> myVacNotNotif(@RequestParam int id){
+		return vr.myVacNotNotif(id);
+	}
+	
+	@RequestMapping(value="/annulnotif")
+	public boolean anuulNotif(@RequestParam int id) {
+		try {
+			List<Vacation> v=vr.myVac(id);
+			for(Vacation vac :v) {
+				vac.setEstnotif(1);
+			}
+			vr.saveAll(v);
+			return true;
+		}
+		catch(Exception ex) {
+			return false;
+		}
+	}
+	
 }

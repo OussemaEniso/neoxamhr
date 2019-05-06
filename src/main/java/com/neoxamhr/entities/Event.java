@@ -21,7 +21,15 @@ public class Event {
 	@Temporal(TemporalType.DATE)
 	private Date end;
 	private String dedicated;
+	private int estnotif;
 	
+	
+	public int getEstnotif() {
+		return estnotif;
+	}
+	public void setEstnotif(int estnotif) {
+		this.estnotif = estnotif;
+	}
 	public int getId() {
 		return id;
 	}

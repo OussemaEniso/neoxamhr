@@ -46,7 +46,12 @@ public class EventController {
 			return false;
 		}
 	}
-	
+	/*
+	@RequestMapping(value="/eventofemp")
+	public List<Event> eventOfEmpl(@RequestParam String post){
+		return er.eventOfEmpl(post);
+	}
+	*/
 	
 
 }

@@ -6,7 +6,15 @@ public class FormPost {
 	private String dep;
 	private String post;
 	private String resp;
+	private int estresp;
 	
+	
+	public int getEstresp() {
+		return estresp;
+	}
+	public void setEstresp(int estresp) {
+		this.estresp = estresp;
+	}
 	public int getId() {
 		return id;
 	}

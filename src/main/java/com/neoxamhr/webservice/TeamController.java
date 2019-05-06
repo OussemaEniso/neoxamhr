@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neoxamhr.entities.Employee;
@@ -27,12 +28,24 @@ public class TeamController {
 	public Iterable<Team> allTeam(){
 		return tr.findAll();
 	}
-	
+	/*
 	@RequestMapping(value="/addteam")
 	public boolean addTeam(@RequestBody TeamForm tf) {
 		Team t=new Team(tf.getTeamName());
 		tr.save(t);
 		return true;
+	}
+	*/
+	
+	@RequestMapping(value="/addteam")
+	public boolean addTeam(@RequestParam String name) {
+		try {
+			tr.save(new Team(name));
+			return true;
+		}
+		catch(Exception ex) {
+			return false;
+		}
 	}
 	
 	@RequestMapping(value="/addemptoteam")

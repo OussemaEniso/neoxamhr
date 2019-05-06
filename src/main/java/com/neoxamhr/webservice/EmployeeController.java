@@ -160,6 +160,7 @@ public class EmployeeController {
 		Employee e=er.findById(post.getId()).get();
 		e.setPost(post.getPost());
 		e.setResponsable(post.getResp());
+		e.setEstResp(post.getEstresp());
 		List<Employee> le=new ArrayList<Employee>();
 		le.add(e);
 		
@@ -193,6 +194,7 @@ public class EmployeeController {
 		return le;
 	}
 	
+	// tous les responsables
 	@RequestMapping(value="allresp")
 	public List<Employee> allResp(){
 		return er.allResponsable();
@@ -228,7 +230,11 @@ public class EmployeeController {
 		catch(Exception e) {
 			return 0;
 		}
-		
+	}
+	
+	@RequestMapping("/empofresp")
+	public List<Employee> emplOfResp(@RequestParam String firstname,@RequestParam String lastname){
+		return er.EmplOfResp(firstname + " " + lastname);
 	}
 	
 }

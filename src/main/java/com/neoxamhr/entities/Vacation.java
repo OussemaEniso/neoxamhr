@@ -30,8 +30,15 @@ public class Vacation implements Serializable{
 	private Employee empl;
 	private int estcomf;
 	private double nbrDay;
+	private int estnotif;
 	
 	
+	public int getEstnotif() {
+		return estnotif;
+	}
+	public void setEstnotif(int estnotif) {
+		this.estnotif = estnotif;
+	}
 	public double getNbrDay() {
 		return nbrDay;
 	}
