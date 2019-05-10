@@ -18,10 +18,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.neoxamhr.authen.AuthHelper;
 import com.neoxamhr.authen.TokenResponse;
+import com.neoxamhr.dao.OutlookService;
+import com.neoxamhr.dao.OutlookServiceBuilder;
 import com.neoxamhr.entities.Message;
 import com.neoxamhr.entities.PagedResult;
-import com.neoxamhr.services.OutlookService;
-import com.neoxamhr.services.OutlookServiceBuilder;
 
 @Controller
 public class MailController {

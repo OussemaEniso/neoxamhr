@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neoxamhr.dao.EmployeeRepository;
+import com.neoxamhr.dao.VacationRepository;
 import com.neoxamhr.entities.Employee;
 import com.neoxamhr.entities.Vacation;
-import com.neoxamhr.services.EmployeeRepository;
-import com.neoxamhr.services.VacationRepository;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

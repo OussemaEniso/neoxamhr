@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neoxamhr.dao.SkillsRepository;
 import com.neoxamhr.entities.Employee;
 import com.neoxamhr.entities.Skills;
-import com.neoxamhr.services.SkillsRepository;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

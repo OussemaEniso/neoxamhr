@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neoxamhr.dao.SendEmailRepository;
 import com.neoxamhr.entities.SendEmail;
-import com.neoxamhr.services.SendEmailRepository;
 
 
 @RestController

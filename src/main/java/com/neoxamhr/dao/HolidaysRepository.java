@@ -1,4 +1,4 @@
-package com.neoxamhr.services;
+package com.neoxamhr.dao;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -30,8 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.neoxamhr.services.StorageImageService;
-
+import com.neoxamhr.dao.StorageImageService;
 
 import ch.qos.logback.core.Context;
 

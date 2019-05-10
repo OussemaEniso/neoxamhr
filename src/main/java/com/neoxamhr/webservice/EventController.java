@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neoxamhr.dao.EventRepository;
 import com.neoxamhr.entities.Event;
-import com.neoxamhr.services.EventRepository;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

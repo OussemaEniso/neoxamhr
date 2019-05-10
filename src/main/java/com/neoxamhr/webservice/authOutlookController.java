@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.neoxamhr.authen.AuthHelper;
 import com.neoxamhr.authen.IdToken;
 import com.neoxamhr.authen.TokenResponse;
+import com.neoxamhr.dao.OutlookService;
+import com.neoxamhr.dao.OutlookServiceBuilder;
 import com.neoxamhr.entities.OutlookUser;
-import com.neoxamhr.services.OutlookService;
-import com.neoxamhr.services.OutlookServiceBuilder;
 import com.neoxamhr.authen.AuthHelper;
 
 @Controller

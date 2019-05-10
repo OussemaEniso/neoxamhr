@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -56,16 +57,21 @@ public class Employee{
 	private int salary;
 	private double soldConge;
 	
-	@OneToMany(mappedBy="empl",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="empl",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JsonIgnoreProperties("empl")
 	private List<Skills> skillsEmpl = new ArrayList<Skills>();
 	
 	@ManyToOne
 	@JsonIgnoreProperties("team")
 	private Team team;
-	@OneToMany(mappedBy="empl")
+	
+	@OneToMany(mappedBy="empl",fetch=FetchType.LAZY)
 	private List<Vacation> vac;
 	
+	@ManyToMany
+	@JoinTable
+	@JsonIgnoreProperties("emp")
+	private Set<VacWithOutPay> vacNoPay;
 	
 	/*
 	@OneToMany(mappedBy="employee",cascade=CascadeType.ALL,orphanRemoval = true)
@@ -81,6 +87,12 @@ public class Employee{
 	
 	public int getEstResp() {
 		return estResp;
+	}
+	public Set<VacWithOutPay> getVacNoPay() {
+		return vacNoPay;
+	}
+	public void setVacNoPay(Set<VacWithOutPay> vacNoPay) {
+		this.vacNoPay = vacNoPay;
 	}
 	public double getSoldConge() {
 		return soldConge;

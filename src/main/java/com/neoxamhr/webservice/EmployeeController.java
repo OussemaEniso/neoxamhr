@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,15 +28,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.neoxamhr.dao.EmployeeRepository;
+import com.neoxamhr.dao.SkillsRepository;
+import com.neoxamhr.dao.TeamRepository;
+import com.neoxamhr.dao.UserRepository;
+import com.neoxamhr.dao.VacWithOutPayRepository;
+import com.neoxamhr.dao.VacationRepository;
 import com.neoxamhr.entities.Employee;
 import com.neoxamhr.entities.Skills;
 import com.neoxamhr.entities.Team;
 import com.neoxamhr.entities.User;
-import com.neoxamhr.services.EmployeeRepository;
-import com.neoxamhr.services.SkillsRepository;
-import com.neoxamhr.services.TeamRepository;
-import com.neoxamhr.services.UserRepository;
-import com.neoxamhr.services.VacationRepository;
+import com.neoxamhr.entities.VacWithOutPay;
+import com.neoxamhr.entities.Vacation;
 
 
 @RestController
@@ -55,6 +60,11 @@ public class EmployeeController {
 	
 	@Autowired
 	private UserRepository ur;
+	
+	@Autowired
+	private VacWithOutPayRepository vw;
+	
+	
 	
 	@RequestMapping(value="/employe")
 	public Iterable<Employee> getAllEmploye(){
@@ -232,9 +242,37 @@ public class EmployeeController {
 		}
 	}
 	
-	@RequestMapping("/empofresp")
+	@RequestMapping(value="/empofresp")
 	public List<Employee> emplOfResp(@RequestParam String firstname,@RequestParam String lastname){
 		return er.EmplOfResp(firstname + " " + lastname);
+	}
+	
+	@RequestMapping(value="/addcongenopay")
+	public boolean addCongeNoPay(@RequestBody VacReceive e) {
+		try {
+			System.out.println(e.getIdVac()+e.getTitle()+e.getStart());
+			
+			Employee emp=er.findById(e.getIdVac()).get();
+			VacWithOutPay vwop=vw.findByTypeIgnorCase(e.getTitle().split(" ")[0]).get(0);
+			Set<VacWithOutPay> lv = vw.autorizeVac(e.getIdVac());
+			boolean x=lv.add(vwop);
+			System.out.println(x);
+			
+			if(x==true) {
+				emp.setVacNoPay(lv);
+				er.save(emp);
+				Vacation v= new Vacation(e.getTitle(), e.getStart(), e.getEnd(), emp, 0);
+				vr.save(v);
+			}
+			
+			return x;
+			
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		
 	}
 	
 }

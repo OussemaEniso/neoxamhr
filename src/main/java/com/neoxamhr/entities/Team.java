@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -18,7 +19,7 @@ public class Team implements Serializable{
 	@GeneratedValue
 	private int idTeam;
 	private String teamName;
-	@OneToMany(mappedBy="team")
+	@OneToMany(mappedBy="team",fetch=FetchType.LAZY)
 	private List<Employee> team;
 	@ManyToOne
 	@JsonIgnoreProperties("teams")

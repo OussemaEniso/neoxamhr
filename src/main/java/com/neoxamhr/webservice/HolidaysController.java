@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neoxamhr.dao.HolidaysRepository;
 import com.neoxamhr.entities.Holidays;
-import com.neoxamhr.services.HolidaysRepository;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

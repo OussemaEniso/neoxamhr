@@ -1,4 +1,4 @@
-package com.neoxamhr.services;
+package com.neoxamhr.dao;
 
 import java.util.List;
 
