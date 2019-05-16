@@ -46,10 +46,12 @@ public class VacWithOutPayController {
 		}
 	}
 	
+	
 	@RequestMapping(value="/myvacnopay")
 	public Set<VacWithOutPay> autorizeVac(@RequestParam int id){
 		return vr.autorizeVac(id);
 	}
+	
 	
 	
 

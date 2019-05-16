@@ -31,6 +31,7 @@ public class VacationController {
 	@Autowired
 	private EmployeeRepository er;
 	
+	
 	@RequestMapping(value="/allConge")
 	public Iterable<Vacation> allVacation() {
 		return vr.findAll();
@@ -80,6 +81,8 @@ public class VacationController {
 		//vr.deleteById(id);
 		return true;
 	}
+	
+
 	
 	@RequestMapping(value="/empvac")
 	public List<Employee> findEmpVac(){

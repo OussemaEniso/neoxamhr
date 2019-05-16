@@ -248,31 +248,79 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value="/addcongenopay")
-	public boolean addCongeNoPay(@RequestBody VacReceive e) {
+	public List<String> addCongeNoPay(@RequestBody VacReceive e) {
+		List<String> ls=new ArrayList<String>();
 		try {
 			System.out.println(e.getIdVac()+e.getTitle()+e.getStart());
 			
 			Employee emp=er.findById(e.getIdVac()).get();
 			VacWithOutPay vwop=vw.findByTypeIgnorCase(e.getTitle().split(" ")[0]).get(0);
+			
 			Set<VacWithOutPay> lv = vw.autorizeVac(e.getIdVac());
 			boolean x=lv.add(vwop);
 			System.out.println(x);
+			
+			List<Vacation> lvac=vr.getAllVaccOfEmp(emp.getIdEmpl());
+			// eliminer le chefauchement de congé
+			for( Vacation va : lvac) {
+				if(e.getStart().getTime() <= va.getEnd().getTime() && e.getEnd().getTime() >= va.getStart().getTime() ) {
+					ls.add("date deja reservé");
+					return ls;
+				}
+			}
 			
 			if(x==true) {
 				emp.setVacNoPay(lv);
 				er.save(emp);
 				Vacation v= new Vacation(e.getTitle(), e.getStart(), e.getEnd(), emp, 0);
 				vr.save(v);
+				ls.add("demande ajouté");
+				return ls;
+			}
+			else {
+				ls.add("Congé deja consommé");
+				return ls;
 			}
 			
-			return x;
+			
 			
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			return false;
+			ls.add("505");
+			return ls;
 		}
 		
+	}
+	
+	@RequestMapping(value="/deletecong")
+	public boolean deleteCong(@RequestBody int id) {
+		try {
+			Vacation v=vr.findById(id).get();
+			int idEmp=v.getEmpl().getIdEmpl();
+			Employee e=er.findById(idEmp).get();
+			
+			e.setSoldConge(e.getSoldConge()+v.getNbrDay());
+			er.save(e);
+			vr.deleteById(id);
+			try {
+			Set<VacWithOutPay> sv= vw.autorizeVac(idEmp);
+				//Set<VacWithOutPay> sv= new HashSet<VacWithOutPay>();
+			VacWithOutPay vwo=vw.findByTypeIgnorCase(v.getVacationName().split(" ")[0]).get(0);
+			sv.remove(vwo);
+			e.setVacNoPay(sv);
+			er.save(e);
+			
+			}
+			catch(Exception ex) {
+				System.out.println("error");
+			}
+			
+			return true;
+		}
+		catch(Exception ex) {
+			return false;
+		}
 	}
 	
 }
