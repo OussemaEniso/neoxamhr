@@ -75,7 +75,9 @@ public class EmployeeController {
 	public @ResponseBody void addEmploye(@RequestBody FormEmploye e ) {
 		System.out.print(e.getFirstname()+e.getLastname()+e.getEmail()+e.getAdress()+ e.getPost()+e.getPh()+e.getResponsable());
 		Employee emp = new Employee(e.getFirstname(),e.getLastname(),e.getEmail(),e.getAdress(),e.getPost(),e.getPh(),e.getResponsable(),e.getEstResp(),e.getSexe(),e.getCin(),e.getCnss(),e.getNaiss(),e.getVille(),e.getDateent(),e.getMat(),e.getSalaire());
-		
+		User user=new User(e.getEmail(),"");
+		ur.save(user);
+		emp.setUser(user);
 		Team t=null;
 		try {
 			t=tr.findByTeamNameIgnoreCase(e.getDep()).get(0);

@@ -21,9 +21,9 @@ public class Vacation implements Serializable{
 	@GeneratedValue
 	private int idVac;
 	private String VacationName;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date start;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date end;
 	@ManyToOne
 	@JsonIgnoreProperties("vac")

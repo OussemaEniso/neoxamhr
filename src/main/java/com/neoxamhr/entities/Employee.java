@@ -73,6 +73,12 @@ public class Employee{
 	@JsonIgnoreProperties("emp")
 	private Set<VacWithOutPay> vacNoPay;
 	
+	@OneToOne
+	@JoinColumn
+	private User user;
+	
+	
+	
 	/*
 	@OneToMany(mappedBy="employee",cascade=CascadeType.ALL,orphanRemoval = true)
 	private List<SkillsEmpl> lse;
@@ -85,6 +91,12 @@ public class Employee{
 	}
 	*/
 	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public int getEstResp() {
 		return estResp;
 	}

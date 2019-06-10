@@ -21,6 +21,10 @@ public class User{
 	private String password;
 	private String mail;
 	
+	@OneToOne(mappedBy="user")
+	@JsonIgnoreProperties("user")
+	private Employee employee;
+	
 	public String getMail() {
 		return mail;
 	}

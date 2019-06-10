@@ -5,8 +5,14 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Event {
@@ -16,14 +22,23 @@ public class Event {
 	private int id;
 	private String name;
 	private String crea;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date start;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date end;
 	private String dedicated;
 	private int estnotif;
 	
+	@ManyToOne
+	@JoinColumn
+	private Room room;
 	
+	public Room getRoom() {
+		return room;
+	}
+	public void setRoom(Room room) {
+		this.room = room;
+	}
 	public int getEstnotif() {
 		return estnotif;
 	}
@@ -67,17 +82,20 @@ public class Event {
 		this.dedicated = dedicated;
 	}
 	
-	public Event(String name, String crea, Date start, Date end, String dedicated) {
+	public Event() {
+		super();
+	}
+	public Event(String name, String crea, Date start, Date end, String dedicated, Room room) {
 		super();
 		this.name = name;
 		this.crea = crea;
 		this.start = start;
 		this.end = end;
 		this.dedicated = dedicated;
+		this.room = room;
 	}
-	public Event() {
-		super();
-	}
+	
+	
 	
 	
 	
