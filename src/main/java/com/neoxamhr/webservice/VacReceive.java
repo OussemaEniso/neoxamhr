@@ -9,10 +9,24 @@ public class VacReceive {
 	private int idVac;
 	private String title;
 	private Date start;
+	private TimeModel timestart;
 	private Date end;
+	private TimeModel timeend;
 	private String employe;
 	private int nbrDay;
 	
+	public TimeModel getTimestart() {
+		return timestart;
+	}
+	public void setTimestart(TimeModel timestart) {
+		this.timestart = timestart;
+	}
+	public TimeModel getTimeend() {
+		return timeend;
+	}
+	public void setTimeend(TimeModel timeend) {
+		this.timeend = timeend;
+	}
 	public int getNbrDay() {
 		return nbrDay;
 	}

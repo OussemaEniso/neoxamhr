@@ -44,6 +44,13 @@ public class VacationController {
 		String lastname=v.getEmploye().split(" ")[1];
 		Employee e=er.findByFirstnameAndLastname(firstname, lastname).get(0);
 		Vacation vacc=new Vacation(v.getTitle(),v.getStart(),v.getEnd(),e,v.getNbrDay());
+		vacc.getStart().setHours(v.getTimestart().getHour());
+		vacc.getStart().setMinutes(v.getTimestart().getMinute());
+		vacc.getEnd().setHours(v.getTimeend().getHour());
+		vacc.getEnd().setMinutes(v.getTimeend().getMinute());
+		
+		System.out.println( "eh " + v.getTimestart().getHour()+ "em "+ v.getTimestart().getMinute()+ "sh " + v.getTimeend().getHour()+ "sm " + v.getTimeend().getMinute() );
+		
 		List<Vacation> lv=vr.getAllVaccOfEmp(e.getIdEmpl());
 		// eliminer le chefauchement de congé
 		for( Vacation va : lv) {

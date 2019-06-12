@@ -32,6 +32,7 @@ public class EventController {
 		e.getStart().setMinutes(event.getTimestart().getMinute());
 		e.getEnd().setHours(event.getTimeend().getHour());
 		e.getEnd().setMinutes(event.getTimeend().getMinute());
+		
 		try {
 			er.save(e);
 			System.out.println(event.getTimeend().getMinute());
