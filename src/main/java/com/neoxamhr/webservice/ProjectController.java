@@ -10,6 +10,7 @@ import com.neoxamhr.dao.ProjectRepository;
 import com.neoxamhr.dao.TeamRepository;
 import com.neoxamhr.entities.Project;
 import com.neoxamhr.entities.Team;
+import com.neoxamhr.webservice.model.ProjectForm;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

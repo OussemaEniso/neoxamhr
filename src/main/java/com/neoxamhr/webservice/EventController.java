@@ -13,6 +13,7 @@ import com.neoxamhr.dao.EventRepository;
 import com.neoxamhr.dao.RoomRepository;
 import com.neoxamhr.entities.Event;
 import com.neoxamhr.entities.Room;
+import com.neoxamhr.webservice.model.EventModel;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
@@ -24,6 +25,11 @@ public class EventController {
 	@Autowired
 	private RoomRepository rr;
 	
+	@RequestMapping(value="/eventofroom")
+	public List<Event> eventOfRoom(@RequestParam String name){
+		return er.eventOfRoom(name);
+	}
+	
 	@RequestMapping(value="/addevent")
 	public boolean addEvent(@RequestBody EventModel event) {
 		Room r=rr.findByName(event.getRoom());
@@ -33,9 +39,18 @@ public class EventController {
 		e.getEnd().setHours(event.getTimeend().getHour());
 		e.getEnd().setMinutes(event.getTimeend().getMinute());
 		
+		List<Event> le=er.eventOfRoom(r.getName());
+		
+		for(Event ev : le) {
+			if(e.getStart().getTime() <= ev.getEnd().getTime() && e.getEnd().getTime() >= ev.getStart().getTime()) {
+				return false;
+			}
+		}
+		
 		try {
 			er.save(e);
 			System.out.println(event.getTimeend().getMinute());
+			
 			return true;
 		}
 		catch(Exception ex) {

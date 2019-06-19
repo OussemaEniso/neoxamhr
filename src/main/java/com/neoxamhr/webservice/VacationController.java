@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neoxamhr.dao.EmployeeRepository;
+import com.neoxamhr.dao.NotificationRepository;
 import com.neoxamhr.dao.VacationRepository;
 import com.neoxamhr.entities.Employee;
+import com.neoxamhr.entities.Notification;
 import com.neoxamhr.entities.Vacation;
+import com.neoxamhr.webservice.model.VacReceive;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
@@ -30,6 +33,9 @@ public class VacationController {
 	
 	@Autowired
 	private EmployeeRepository er;
+	
+	@Autowired
+	private NotificationRepository nr;
 	
 	
 	@RequestMapping(value="/allConge")
@@ -72,6 +78,17 @@ public class VacationController {
 		e.setSoldConge(e.getSoldConge()-v.getNbrDay());
 		vr.save(vacc);
 		as.add(0, "congé demandé avec succés");
+		
+		// Ajout de notification
+		try {
+			Employee emp=er.findByFirstnameAndLastname(e.getResponsable().split(" ")[0], e.getResponsable().split(" ")[1]).get(0);
+		Notification n=new Notification(e.getFirstname()+" "+ e.getLastname() + " demande un congé",emp,new Date());
+		nr.save(n);
+		}
+		catch(Exception exp) {
+			
+		}
+		
 		return as;
 	}
 	
@@ -85,6 +102,8 @@ public class VacationController {
 		er.save(e);
 		v.setEstcomf(-1);
 		vr.save(v);
+		Notification n=new Notification("Votre congé ("+v.getVacationName()+") a été réfusé",e,new Date());
+		nr.save(n);
 		//vr.deleteById(id);
 		return true;
 	}
@@ -106,6 +125,8 @@ public class VacationController {
 		Vacation v = vr.findById(id).get();
 		v.setEstcomf(1);
 		vr.save(v);
+		Notification n=new Notification("votre congé ("+ v.getVacationName() +") a été accepté",v.getEmpl(),new Date());
+		nr.save(n);
 		return true;
 	}
 	
@@ -143,6 +164,33 @@ public class VacationController {
 		catch(Exception ex) {
 			return false;
 		}
+	}
+	
+	@RequestMapping(value="/congewait")
+	public List<Vacation> congeWait(@RequestParam int id){
+		return vr.myVacWait(id);
+	}
+	
+	@RequestMapping(value="/findcongbyresp")
+	public List<Vacation> findCongByResp(@RequestParam String name){
+		return vr.findCongByResp(name);
+	}
+	
+	@RequestMapping(value="/congnotvalid")
+	public List<Vacation> congeNotValid(){
+		return vr.findVacNotValid();
+	}
+	
+	@Scheduled(cron="0 15 17 ? * *")
+	public void VacNotValid() {
+		List<Vacation> lv=vr.findVacNotValid();
+		
+		for(Vacation v : lv) {
+			v.setEstcomf(-1);
+		}
+		
+		vr.saveAll(lv);
+		System.out.println("trtmnt fait");
 	}
 	
 }

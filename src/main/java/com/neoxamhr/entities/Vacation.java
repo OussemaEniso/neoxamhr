@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -25,8 +26,10 @@ public class Vacation implements Serializable{
 	private Date start;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date end;
+	
 	@ManyToOne
 	@JsonIgnoreProperties("vac")
+	@JoinColumn
 	private Employee empl;
 	private int estcomf;
 	private double nbrDay;

@@ -1,4 +1,4 @@
-package com.neoxamhr.webservice;
+package com.neoxamhr.webservice.model;
 
 public class EmailForm {
 	

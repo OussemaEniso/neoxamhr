@@ -37,13 +37,23 @@ public interface VacationRepository extends CrudRepository<Vacation, Integer> {
 	@Query("delete from Vacation v where v.estcomf= -1")
 	void deleteVacNotCom();
 	
+	//les congés des responsables
 	@Query("select distinct v from Vacation v join Employee e on e.estResp=1 and v.estcomf=0")
 	List<Vacation> congeOfResp();
+	
+	@Query("select v from Vacation v where v.empl.idEmpl=?1 and v.estcomf=0")
+	public List<Vacation> myVacWait(int id);
 	
 	@Query("select v from Vacation v where v.empl.idEmpl=?1")
 	public List<Vacation> myVac(int id);
 	
 	@Query("select v from Vacation v where v.empl.idEmpl=?1 and v.estnotif=0")
 	public List<Vacation> myVacNotNotif(int id);
+	
+	@Query("select v from Vacation v join Employee e on e.responsable=?1 and v.empl.idEmpl=e.idEmpl and v.estcomf=0 ")
+	List<Vacation> findCongByResp(String name);
+	
+	@Query("select v from Vacation v where datediff(v.start,now()) < 0 and v.estcomf = 0 ")
+	List<Vacation> findVacNotValid();
 
 }

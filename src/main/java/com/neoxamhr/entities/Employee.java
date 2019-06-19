@@ -77,20 +77,17 @@ public class Employee{
 	@JoinColumn
 	private User user;
 	
+	@OneToMany(mappedBy="empl")
+	@JsonIgnoreProperties("empl")
+	private List<Notification> notification;
 	
 	
-	/*
-	@OneToMany(mappedBy="employee",cascade=CascadeType.ALL,orphanRemoval = true)
-	private List<SkillsEmpl> lse;
-	
-	public List<SkillsEmpl> getLse() {
-		return lse;
+	public List<Notification> getNotification() {
+		return notification;
 	}
-	public void setLse(List<SkillsEmpl> lse) {
-		this.lse = lse;
+	public void setNotification(List<Notification> notification) {
+		this.notification = notification;
 	}
-	*/
-	
 	public User getUser() {
 		return user;
 	}

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.neoxamhr.dao.SendEmailRepository;
 import com.neoxamhr.entities.SendEmail;
+import com.neoxamhr.webservice.model.EmailForm;
 
 
 @RestController

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.neoxamhr.dao.RoomRepository;
 import com.neoxamhr.entities.Room;
+import com.neoxamhr.webservice.model.RoomModel;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

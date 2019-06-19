@@ -22,6 +22,7 @@ import com.neoxamhr.dao.EmployeeRepository;
 import com.neoxamhr.dao.UserRepository;
 import com.neoxamhr.entities.Employee;
 import com.neoxamhr.entities.User;
+import com.neoxamhr.webservice.model.AuthUser;
 
 
 @RestController

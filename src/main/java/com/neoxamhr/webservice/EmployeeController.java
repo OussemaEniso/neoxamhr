@@ -29,17 +29,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.neoxamhr.dao.EmployeeRepository;
+import com.neoxamhr.dao.NotificationRepository;
 import com.neoxamhr.dao.SkillsRepository;
 import com.neoxamhr.dao.TeamRepository;
 import com.neoxamhr.dao.UserRepository;
 import com.neoxamhr.dao.VacWithOutPayRepository;
 import com.neoxamhr.dao.VacationRepository;
 import com.neoxamhr.entities.Employee;
+import com.neoxamhr.entities.Notification;
 import com.neoxamhr.entities.Skills;
 import com.neoxamhr.entities.Team;
 import com.neoxamhr.entities.User;
 import com.neoxamhr.entities.VacWithOutPay;
 import com.neoxamhr.entities.Vacation;
+import com.neoxamhr.webservice.model.FormEmploye;
+import com.neoxamhr.webservice.model.FormPost;
+import com.neoxamhr.webservice.model.SkillsForm;
+import com.neoxamhr.webservice.model.VacReceive;
 
 
 @RestController
@@ -63,6 +69,9 @@ public class EmployeeController {
 	
 	@Autowired
 	private VacWithOutPayRepository vw;
+	
+	@Autowired
+	private NotificationRepository nr;
 	
 	
 	
@@ -89,8 +98,6 @@ public class EmployeeController {
 			emp.setTeam(t);
 		}
 		// crée un compte pour chaque employee nouveauté créé
-		User u=new User(emp.getEmail()," ");
-		ur.save(u);
 		er.save(emp);
 		System.out.print(emp.toString());
 	}
@@ -99,7 +106,7 @@ public class EmployeeController {
 	public boolean delete(@RequestParam int id) {
 		System.out.println(id);
 		Employee e= er.findById(id).get();
-		User u=ur.findById(id-1).get();
+		User u=e.getUser();
 		ur.delete(u);
 		vr.deleteVac(id);
 		er.delete(e);
@@ -109,12 +116,6 @@ public class EmployeeController {
 	
 	@PostMapping(value="/modifempl")
 	public @ResponseBody boolean modifEmploye(@RequestBody FormEmploye e ) {
-		/*
-		User u= ur.findById(e.getId()-1).get();
-		u.setMail(e.getEmail());
-		System.out.println(u.toString());
-		ur.save(u);
-		*/
 		Employee emp= er.findById(e.getId()).get();
 		emp.setFirstname(e.getFirstname());
 		emp.setLastname(e.getLastname());
@@ -195,7 +196,6 @@ public class EmployeeController {
 	@RequestMapping(value="findprofil")
 	public Employee findProfil(@RequestParam String mail) {
 		return er.findProfil(mail);
-		
 	}
 	
 	@RequestMapping(value="listacomf")
@@ -221,8 +221,8 @@ public class EmployeeController {
 		System.out.println("+1.75 monthly");
 		er.saveAll(le);
 	}
-	*/
 	
+	*/
 	@Scheduled(cron="0 40 9 ? * MON-FRI")
 	public void addScore() {
 		List<Employee> le= (List<Employee>) er.findAll();
@@ -233,6 +233,7 @@ public class EmployeeController {
 		er.saveAll(le);
 		
 	}
+	
 	
 	@RequestMapping(value="/nbrconge")
 	public int nbrConge(@RequestParam int id) {
@@ -277,6 +278,8 @@ public class EmployeeController {
 				Vacation v= new Vacation(e.getTitle(), e.getStart(), e.getEnd(), emp, 0);
 				vr.save(v);
 				ls.add("demande ajouté");
+				Notification n =new Notification(v.getEmpl().getFirstname()+ " " +v.getEmpl().getLastname() +"a demandé un congé",v.getEmpl(),new Date());
+				nr.save(n);
 				return ls;
 			}
 			else {
@@ -312,6 +315,8 @@ public class EmployeeController {
 			sv.remove(vwo);
 			e.setVacNoPay(sv);
 			er.save(e);
+			Notification n=new Notification("votre congé ("+v.getVacationName()+") a été réfusé",e,new Date());
+			nr.save(n);
 			
 			}
 			catch(Exception ex) {
