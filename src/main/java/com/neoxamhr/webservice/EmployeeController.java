@@ -16,6 +16,7 @@ import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.neoxamhr.Services.HashingMD5;
 import com.neoxamhr.dao.EmployeeRepository;
 import com.neoxamhr.dao.NotificationRepository;
 import com.neoxamhr.dao.SkillsRepository;
@@ -72,6 +74,9 @@ public class EmployeeController {
 	
 	@Autowired
 	private NotificationRepository nr;
+	
+	@Autowired
+	private HashingMD5 md5;
 	
 	
 	
@@ -328,6 +333,12 @@ public class EmployeeController {
 		catch(Exception ex) {
 			return false;
 		}
+	}
+	
+	@RequestMapping(value="/hashpwd")
+	public ResponseEntity<String> hashPwd(@RequestParam String pwd){
+		String pwdHashed=md5.MD5Hash(pwd);
+		return ResponseEntity.accepted().body(pwdHashed);
 	}
 	
 }

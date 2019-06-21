@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neoxamhr.Services.HashingMD5;
 import com.neoxamhr.dao.EmployeeRepository;
 import com.neoxamhr.dao.UserRepository;
 import com.neoxamhr.entities.Employee;
@@ -35,6 +36,9 @@ public class AuthServiceController {
 	@Autowired
 	private EmployeeRepository er;
 	
+	@Autowired
+	private HashingMD5 md5;
+	
 	public User user=null;
 	
 
@@ -43,14 +47,22 @@ public class AuthServiceController {
 	public @ResponseBody Employee auth(@RequestBody AuthUser user) {
 		Employee e=null;
 		
-		long i=userRep.countByMailAndPassword(user.getLogin(), user.getPassword());
+		String pwdHashed=md5.MD5Hash(user.getPassword());
+		long i=userRep.countByMailAndPassword(user.getLogin(), pwdHashed);
 		System.out.println(i);
 		try {
-			this.user=userRep.findByMailAndPassword(user.getLogin(), user.getPassword());
+			if(user.getPassword()=="") {
+				this.user=userRep.findByMailAndPassword(user.getLogin(), user.getPassword());
 			e = er.findProfil(this.user.getMail());
+			}
+			else {
+				this.user=userRep.findByMailAndPassword(user.getLogin(), pwdHashed);
+				e = er.findProfil(this.user.getMail());
+			}
+			
 		}
 		catch (Exception exp) {
-			
+			return null;
 		}
 
 		return e;
@@ -60,7 +72,8 @@ public class AuthServiceController {
 	public boolean pswdmodif(@RequestParam String pwd,@RequestParam String id) {
 		System.out.println(pwd +" "+id);
 		User u=userRep.findByMail(id);
-		u.setPassword(pwd);
+		String pwdHashed=md5.MD5Hash(pwd);
+		u.setPassword(pwdHashed);
 		userRep.save(u);
 		return true;
 	}
